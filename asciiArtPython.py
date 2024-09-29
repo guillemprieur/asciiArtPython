@@ -186,7 +186,7 @@ def toImages(liste:list,num:str="",path:str="mika_export"):
     #importing modules
     from PIL import Image,ImageFont,ImageDraw
     
-    assert type(liste)==list and all(type(liste[i])==str for i in range(len[liste]))
+    assert type(liste)==list and all(type(liste[i])==str for i in range(len(liste)))
 
     #exportation
     font = ImageFont.truetype("FUTRFW.TTF", 20)
