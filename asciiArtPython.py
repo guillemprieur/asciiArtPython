@@ -248,7 +248,7 @@ def toTxt(liste:list,path:str="file.txt"):
     -------
     None.
     """
-    assert type(liste)==list and all(type(liste[i])==str for i in range(len[liste]))
+    assert type(liste)==list and all(type(liste[i])==str for i in range(len(liste)))
     file=open(path,"w")
     for i in range(len(liste)):
         file.write("\n"+liste[i])
