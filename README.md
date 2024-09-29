@@ -2,7 +2,7 @@
 Turn videos, photos and even your webcam into ASCII Art with this Python module.
 
 # Requirements
-To use this module, you need the pillow, opencv-python and moviepy modules.
+To use this module, you need the pillow, opencv-python, numpy and moviepy modules.
 
 # How to use
 1- To start, use the command : import asciiArtPython as aap
