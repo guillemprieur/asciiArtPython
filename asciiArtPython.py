@@ -32,6 +32,7 @@ def _reduceImageQuality(image,size:int=10000):
     return image.resize((int(n1), int(n2)))
 
 def _captureWebcam(cap):
+    from PIL import Image
     import cv2
     ret, frame = cap.read()
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
