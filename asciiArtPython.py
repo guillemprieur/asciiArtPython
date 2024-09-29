@@ -1,3 +1,14 @@
+"""
+This library includes the following functions:/Cette bibliothèque comprend les fonctions suivantes :
+    - fromImages
+    - toImages
+    - fromAndToImages
+    - fromAndToVideos
+    - toTxt
+    - printInTerminal
+    - liveFromWebcam
+    
+"""
 #-----------------internal functions-----------------
 def _importImageWB(path:str):
     #importing modules
@@ -145,17 +156,6 @@ def _combineVideoWithAudio(name:str,to:str="mika_export_final.mp4"):
 
 
 #-----------------main functions-----------------
-"""
-This library includes the following functions:/Cette bibliothèque comprend les fonctions suivantes :
-    - fromImages
-    - toImages
-    - fromAndToImages
-    - fromAndToVideos
-    - toTxt
-    - printInTerminal
-    - liveFromWebcam
-    
-"""
 def fromImages(path:str,size:int=250000)->list:
     """
     Parameters
