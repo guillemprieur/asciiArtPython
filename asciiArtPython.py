@@ -285,7 +285,10 @@ def liveFromWebcam():
     import cv2
     from time import sleep
     cap = cv2.VideoCapture(0)
-    while True:
-        printInTerminal(_characterList(_array2Ascii(_numpy2Array(_image2Numpy(_reduceImageQuality(_captureWebcam(cap),15000))),[" ",".",":",";","*","=","(","{","$","&","@","#"]),-1,-1))
-        sleep(0.1)
+    try:
+        while True:
+            printInTerminal(_characterList(_array2Ascii(_numpy2Array(_image2Numpy(_reduceImageQuality(_captureWebcam(cap),15000))),[" ",".",":",";","*","=","(","{","$","&","@","#"]),-1,-1))
+            sleep(0.1)
+    except KeyboardInterrupt:
+        cap.release
 #-----------------main functions-----------------
