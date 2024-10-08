@@ -292,3 +292,27 @@ def liveFromWebcam():
     except KeyboardInterrupt:
         cap.release
 #-----------------main functions-----------------
+
+
+#-----------------default execution-----------------
+if __name__=="__main__":
+    mode=int(input("Would you like to (0) test this module or (1) find out more about it? "))
+    if not(mode):
+        mode=int(input("For which file type do you want to use this program? (0=Video ; 1=Photo ; 2=webcam) "))
+        if mode == 1:
+            nom=input("What's the path of the image to be imported? ")
+            mode=int(input("How would you like to export it? (0=.png file ; 1=.txt file ; 2=in terminal "))
+            if mode == 0:
+                fromAndToImages(nom)
+            elif mode == 1:
+                toTxt(fromImages(nom,125000))
+            else:
+                printInTerminal(fromImages(nom,15000))
+        elif mode == 0:
+            nom=input("What's the path of the video to be imported? ")
+            fromAndToVideos(nom)
+        else:
+            liveFromWebcam()
+    else:
+        print("\nThis library includes the following functions:/Cette bibliothèque comprend les fonctions suivantes :\n- fromImages\n- toImages\n- fromAndToImages\n- fromAndToVideos\n- toTxt\n- printInTerminal\n- liveFromWebcam")
+#-----------------default execution-----------------
