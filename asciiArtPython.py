@@ -4,6 +4,7 @@ This library includes the following functions:/Cette bibliothèque comprend les 
     - toImages
     - fromAndToImages
     - fromAndToVideos
+    - fromAndToVideosDark
     - toTxt
     - printInTerminal
     - liveFromWebcam
@@ -157,7 +158,7 @@ def _combineVideoWithAudio(name:str,to:str="mika_export_final.mp4"):
 
 
 #-----------------main functions-----------------
-def fromImages(path:str,size:int=250000)->list:
+def fromImages(path:str,size:int=250000,carac:list=0)->list:
     """
     Parameters
     ----------
@@ -180,9 +181,24 @@ def fromImages(path:str,size:int=250000)->list:
     assert type(size)==int, "image size must be in integer format"
     
     #execution of functions used for images
-    return _characterList(_array2Ascii(_numpy2Array(_image2Numpy(_reduceImageQuality(_importImageWB(path),size)))))
+    if type(carac)!=list:
+        carac=["#","@","&","$","{","(","=","*",";",":","."," "]
+    return _characterList(_array2Ascii(_numpy2Array(_image2Numpy(_reduceImageQuality(_importImageWB(path),size))),carac))
 
-def toImages(liste:list,num:str="",path:str="mika_export"):
+def toImages(liste:list,num:str="",path:str="mika_export",backgrColor:str="white"):
+    """
+    Parameters
+    ----------
+    path : str, optional
+        this variable contains the name of the file to which you wish to export ascii art. the default is "mika_export".
+    backgrColor : str, optional
+        this parameter can be either “white” or “black” depending on the desired mode. the default is "white".
+
+    Returns
+    -------
+    None.
+
+    """
     #importing modules
     from PIL import Image,ImageFont,ImageDraw
     
@@ -190,13 +206,54 @@ def toImages(liste:list,num:str="",path:str="mika_export"):
 
     #exportation
     font = ImageFont.truetype("FUTRFW.TTF", 20)
-    img = Image.new("RGB", (len(liste[0])*20,len(liste)*20), color = "white")
+    img = Image.new("RGB", (len(liste[0])*20,len(liste)*20), color = backgrColor)
     draw = ImageDraw.Draw(img)
     
     for i in range(len(liste)):
-        draw.text((0, i*20),liste[i],(0,0,0),font=font)
+        if backgrColor=="black":
+            draw.text((0, i*20),liste[i],(255,255,255),font=font)
+        else:
+            draw.text((0, i*20),liste[i],(0,0,0),font=font)
     img.save(path+str(num)+".png")
+
+def fromAndToVideosDark(path:str):
+    """
+    Parameters
+    ----------
+    path : str
+        this function takes the path to a video as input.
     
+    Returns
+    -------
+    None.
+    """
+    #importing modules
+    import os
+    try:
+        from tqdm import tqdm
+    except ModuleNotFoundError:
+        pass
+    
+    #pre-execution checks
+    assert type(path)==str, "image path must be in string format"
+    assert os.path.isfile(path), "the specified video does not exist"
+    if not(os.path.isdir("data")):
+        os.mkdir("data")
+    
+    #execution of functions used for videos
+    nb,duration=_video2Pics(path)
+    listPath=[]
+    try:
+        for i in tqdm(range(nb)):
+            toImages(fromImages("./data/frame"+str(i)+".jpg",10000,[" ",".",":",";","*","=","(","{","$","&","@","#"]),str(i),"./data/frame_export","black")
+            listPath.append("./data/frame_export"+str(i)+".png")
+    except NameError:
+        for i in range(nb):
+            toImages(fromImages("./data/frame"+str(i)+".jpg",10000,[" ",".",":",";","*","=","(","{","$","&","@","#"]),str(i),"./data/frame_export","black")
+            listPath.append("./data/frame_export"+str(i)+".png")
+    _pics2Video(listPath,nb/duration)
+    _combineVideoWithAudio(path,path[:-4]+"_mikaDark.mp4")
+
 def fromAndToVideos(path:str):
     """
     Parameters
@@ -232,7 +289,7 @@ def fromAndToVideos(path:str):
         for i in range(nb):
             toImages(fromImages("./data/frame"+str(i)+".jpg",10000),str(i),"./data/frame_export")
             listPath.append("./data/frame_export"+str(i)+".png")
-    _pics2Video(listPath)
+    _pics2Video(listPath,nb/duration)
     _combineVideoWithAudio(path,path[:-4]+"_mika.mp4")
 
 def toTxt(liste:list,path:str="file.txt"):
@@ -248,14 +305,32 @@ def toTxt(liste:list,path:str="file.txt"):
     -------
     None.
     """
-    assert type(liste)==list and all(type(liste[i])==str for i in range(len(liste)))
+    assert type(liste)==list and all(type(liste[i])==str for i in range(len[liste]))
     file=open(path,"w")
     for i in range(len(liste)):
         file.write("\n"+liste[i])
     file.close()
 
-def fromAndToImages(path:str,size:int=250000):
-    toImages(fromImages(path,size))
+def fromAndToImages(path:str,size:int=250000,param=0):
+    """
+    Parameters
+    ----------
+    path : str
+        path to source file.
+    size : int, optional
+        desired number of characters in ascii art. the default is 250000.
+    param : TYPE, optional
+        either “True” or “False” (True=Black; False=White). the default is False.
+
+    Returns
+    -------
+    None.
+
+    """
+    if param:
+        toImages(fromImages(path,size,[" ",".",":",";","*","=","(","{","$","&","@","#"]),backgrColor="black")
+    else:
+        toImages(fromImages(path,size))
 
 def printInTerminal(liste:list):
     """
@@ -290,7 +365,8 @@ def liveFromWebcam():
             printInTerminal(_characterList(_array2Ascii(_numpy2Array(_image2Numpy(_reduceImageQuality(_captureWebcam(cap),15000))),[" ",".",":",";","*","=","(","{","$","&","@","#"]),-1,-1))
             sleep(0.1)
     except KeyboardInterrupt:
-        cap.release
+        #cap.release
+        pass
 #-----------------main functions-----------------
 
 
